@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мy project</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="conteiner mt-5">
+        <h1 class="mb-4">Расписание занятий</h1>
+        <ul id="classSchedule"></ul>
+    </div>
+
+    <script>
+        const scheduleData = [
+            {
+                title: 'Акваэробика',
+                classTime: 'Время проведения: 08:10 - 09:00',
+               maxParticipants:  10,
+               recordedParticipants: 0
+            },
+             {
+                title: 'Силовой фитнес',
+                classTime: 'Время проведения: 09:00 - 10:30',
+                maxParticipants: 10,
+                 recordedParticipants: 0
+            }, 
+             {
+                title: 'Кикбоксинг',
+                classTime: 'Время проведения: 11:10 - 13:00',
+                maxParticipants: 10,
+                 recordedParticipants: 0
+            },
+             {
+                title: 'Йога',
+                classTime: 'Время проведения: 14:00 - 15:00',
+              maxParticipants: 10,
+                 recordedParticipants: 0
+            },
+            {
+                title: 'Акваэробика',
+                classTime: 'Время проведения: 15:10 - 16:00',
+              maxParticipants: 10,
+                recordedParticipants: 0
+            },
+            {
+                title: 'Силовой фитнес',
+                classTime: 'Время проведения: 16:00 - 17:30',
+               maxParticipants: 10,
+                recordedParticipants: 0
+            }
+        ];
+        
+            scheduleData.forEach((element, index) => {
+                const scheduleItem = createSchedule(element, index);
+                  document.getElementById('classSchedule').append(scheduleItem);
+            })
+
+            function createSchedule(schedule, index){
+                const scheduleItem = document.createElement('li');
+                scheduleItem.classList.add('list-group-item');
+
+                const tittleItem = document.createElement('h2');
+                tittleItem.classList.add('mb-3');
+                tittleItem.textContent = schedule.title;
+
+                const timeItem = document.createElement('p');
+                timeItem.textContent = schedule.classTime;
+
+                const maxPractic = document.createElement('p');
+                maxPractic.textContent = `Максимальное количество участников: ${schedule.maxParticipants}`;
+
+                const numPractic = document.createElement('p');
+                numPractic.classList.add('num')
+                numPractic.textContent = `Записанные участники: ${schedule.recordedParticipants}`;
+
+                  const signupButton = document.createElement('button');
+                signupButton.textContent = 'Записаться';
+                signupButton.classList.add('btn', 'btn-warning');
+
+                const cancelButton = document.createElement('button');
+                cancelButton.textContent = 'Отменить запись';
+                cancelButton.classList.add('btn', 'btn-danger');
+
+                // Сохраним индекс занятия, чтобы знать, какое обновлять
+                signupButton.dataset.index = index;
+                cancelButton.dataset.index = index;
+
+
+                scheduleItem.append(tittleItem);
+                scheduleItem.append(timeItem);
+                scheduleItem.append(maxPractic);
+                 scheduleItem.append(numPractic);
+                 scheduleItem.append(signupButton);
+                  scheduleItem.append(cancelButton)
+
+                  return scheduleItem
+            }
+            //логика 
+            classSchedule.addEventListener('click', function(e) {
+                 const index = e.target.dataset.index;
+
+                if (e.target.textContent === 'Записаться') {
+                    if (scheduleData[index].recordedParticipants < scheduleData[index].maxParticipants) {
+                        scheduleData[index].recordedParticipants++;
+                        scheduleUpdate();
+                    } else {
+                        alert('Максимальное количество участников уже достигнуто!');
+                    }
+                }
+                if (e.target.textContent === 'Отменить запись') {
+                    if (scheduleData[index].recordedParticipants > 0) {
+                        scheduleData[index].recordedParticipants--;
+                        scheduleUpdate();
+                    }
+                }
+            });
+            // Функция для обновления расписания 
+            function scheduleUpdate() {
+                const classItems = document.querySelectorAll('.list-group-item');
+
+                classItems.forEach((item, index) => {
+                    const numParticipants = item.querySelector('.num');
+                    numParticipants.textContent = `Записанных участников: ${scheduleData[index].recordedParticipants}`;
+                });
+            }
+        
+    </script>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
